@@ -1,100 +1,23 @@
 //=======================================================
 //		Includes
 //=======================================================
-#include "SimpleAddressBook.h"
-
-
-
-
+#include "AddressBookInterface.h"
 
 //=======================================================
-//		ClearAndResetInputStream : reset input stream
+//		ClearAndResetInput : Clear flags and ignore line
 //=======================================================
-void ClearAndResetInputStream()
+static void ClearAndResetInput()
 {
+	std::cout << "Please enter a number!" << std::endl;
+
 	std::cin.clear();
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
-
-
-
-
 //=======================================================
-//		GetAddressEntryOrderType : Get entry search type
+//		ErrToString : Convert error to string
 //=======================================================
-const AddressEntryOrderType GetAddressEntryOrderType()
-{
-	while (true)
-	{
-		std::cout << "Please choose from the following order types:\n1. First Name Order\n2. Last Name Order" << std::endl;
-
-		ClearAndResetInputStream();
-		int option = 0;
-		if (std::cin >> option)
-		{
-			switch (option)
-			{
-			case 1:
-				return AddressEntryOrderType::FirstNameOrder;
-			case 2:
-				return AddressEntryOrderType::LastNameOrder;
-			default:
-				std::cout << "Invalid order type, please try again" << std::endl;
-				break;
-			}
-		}
-		else
-		{
-			ClearAndResetInputStream();
-		}
-	}
-}
-
-
-
-
-
-//=======================================================
-//		GetEntrySearchType : Get entry search type
-//=======================================================
-const AddressEntrySearchType GetEntrySearchType()
-{
-	while (true)
-	{
-		std::cout << "Please choose from the following search types:\n1. First Name Search\n2. Last Name Search\n3. First and Last Name Search" << std::endl;
-		
-		int option = 0;
-		if (std::cin >> option)
-		{
-			switch (option)
-			{
-			case 1:
-				return AddressEntrySearchType::FirstNameSearch;
-			case 2:
-				return AddressEntrySearchType::LastNameSearch;
-			case 3:
-				return AddressEntrySearchType::FirstAndLastNameSearch;
-			default:
-				std::cout << "Invalid search type, please try again" << std::endl;
-				break;
-			}
-		}
-		else
-		{
-			ClearAndResetInputStream();
-		}
-	}
-}
-
-
-
-
-
-//=======================================================
-//		ToString : Convert AddressEntryError to human readable string
-//=======================================================
-const std::string ToString(const AddressEntryError& error)
+static const std::string ErrToString(const AddressEntryError& error)
 {
 	switch (error)
 	{
@@ -118,7 +41,67 @@ const std::string ToString(const AddressEntryError& error)
 	}
 }
 
+//=======================================================
+//		GetAddressEntryOrderType : Get entry search type
+//=======================================================
+const AddressEntryOrderType GetAddressEntryOrderType()
+{
+	while (true)
+	{
+		std::cout << "Please choose from the following order types:\n1. First Name Order\n2. Last Name Order" << std::endl;
+		
+		int option = 0;
+		if (std::cin >> option)
+		{
+			switch (option)
+			{
+			case 1:
+				return AddressEntryOrderType::FirstNameOrder;
+			case 2:
+				return AddressEntryOrderType::LastNameOrder;
+			default:
+				std::cout << "Invalid order type! please try again." << std::endl;
+				break;
+			}
+		}
+		else
+		{
+			ClearAndResetInput();
+		}
+	}
+}
 
+//=======================================================
+//		GetEntrySearchType : Get entry search type
+//=======================================================
+const AddressEntrySearchType GetEntrySearchType()
+{
+	while (true)
+	{
+		std::cout << "Please choose from the following search types:\n1. First Name Search\n2. Last Name Search\n3. First and Last Name Search" << std::endl;
+		
+		int option = 0;
+		if (std::cin >> option)
+		{
+			switch (option)
+			{
+			case 1:
+				return AddressEntrySearchType::FirstNameSearch;
+			case 2:
+				return AddressEntrySearchType::LastNameSearch;
+			case 3:
+				return AddressEntrySearchType::FirstAndLastNameSearch;
+			default:
+				std::cout << "Invalid search type! please try again." << std::endl;
+				break;
+			}
+		}
+		else
+		{
+			ClearAndResetInput();
+		}
+	}
+}
 
 
 
@@ -145,8 +128,8 @@ int main()
 				AddressEntry entryToAdd;
 				if (std::cin >> entryToAdd)
 				{
-					auto result = SimpleAddressBook::AddEntry(entryToAdd);
-					std::cout << ToString(result);
+					auto result = AddressBookInterface::AddEntry(entryToAdd);
+					std::cout << ErrToString(result);
 				}
 				break;
 			}
@@ -156,14 +139,14 @@ int main()
 				AddressEntry entryToRemove;
 				if (std::cin >> entryToRemove)
 				{
-					auto result = SimpleAddressBook::RemoveEntry(entryToRemove);
-					std::cout << ToString(result);
+					auto result = AddressBookInterface::RemoveEntry(entryToRemove);
+					std::cout << ErrToString(result);
 				}
 				break;
 			}
 			case 3:
 			{
-				auto result = SimpleAddressBook::RetrieveEntries(GetAddressEntryOrderType());
+				auto result = AddressBookInterface::RetrieveEntries(GetAddressEntryOrderType());
 				if (result.empty())
 				{
 					std::cout << "Address book is empty!" << std::endl;
@@ -186,7 +169,7 @@ int main()
 				std::string input;
 				if (std::cin >> input)
 				{
-					auto result = SimpleAddressBook::Search(input, GetEntrySearchType());
+					auto result = AddressBookInterface::Search(input, GetEntrySearchType());
 
 					if (result.empty())
 					{
@@ -206,7 +189,7 @@ int main()
 
 			case 5:
 			{
-				SimpleAddressBook::Clear();
+				AddressBookInterface::Clear();
 				std::cout << "Address book cleared!" << std::endl;
 				break;
 			}
@@ -219,15 +202,20 @@ int main()
 
 			default:
 			{
-				std::cout << "Invalid option!" << std::endl;
+				std::cout << "Invalid option! Please try again." << std::endl;
 				break;
 			}
 			}
 		}
 		else
 		{
-			std::cout << "Invalid input entered, please try again." << std::endl;
-			ClearAndResetInputStream();
+			if (std::cin.eof())
+			{
+				std::cout << "user aborted." << std::endl;
+				return 1;
+			}
+
+			ClearAndResetInput();
 		}
 	}
 

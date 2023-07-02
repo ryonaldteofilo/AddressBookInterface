@@ -3,14 +3,15 @@
 //=======================================================
 //		Includes
 //=======================================================
-#include "CSimpleAddressBook.h"
-
-
-
-
+#include "AddressBookCommon.h"
 
 //=======================================================
-//		CAddressBookManager : Manager class for address book
+//		Forward declaration
+//=======================================================
+class CAddressBook;
+
+//=======================================================
+//		CAddressBookManager : Manager class for address book(s)
 //=======================================================
 class CAddressBookManager
 {
@@ -24,9 +25,9 @@ public:
 	static CAddressBookManager* Get();
 
 	// Get address book
-	CSimpleAddressBook& GetAddressBook();
+	CAddressBook* GetAddressBook();
 
 private:
-	CSimpleAddressBook mAddressBook;
+	std::unique_ptr<CAddressBook> mpAddressBook;
 };
 #endif // C_ADDRESS_BOOK_MANAGER_H

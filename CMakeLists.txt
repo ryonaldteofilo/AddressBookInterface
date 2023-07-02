@@ -1,20 +1,27 @@
-cmake_minimum_required(VERSION 3.25 )
-project(SimpleAddressBook LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.25)
+project(AddressBookInterface LANGUAGES CXX)
 
-add_library(SimpleAddressBookLib STATIC)
+set (CMAKE_CXX_STANDARD 17)
 
-target_sources(SimpleAddressBookLib
+add_library(AddressBookLib STATIC)
+
+target_sources(AddressBookLib
     PRIVATE
-    "source/CSimpleAddressBook.cpp"
-    "source/CAddressBookManager.cpp"
-    "source/SimpleAddressBook.cpp"
-    "source/SimpleAddressBookTypes.cpp"
-    "headers/CSimpleAddressBook.h"
-    "headers/CAddressBookManager.h"
-    "interfaces/SimpleAddressBook.h"
-    "interfaces/SimpleAddressBookTypes.h"
-)
-target_include_directories(SimpleAddressBookLib PUBLIC "interfaces" PRIVATE "headers")
+    "interface/AddressBookInterface.h"
+    "interface/AddressBookTypes.h"
+    "interface/AddressBookCommon.h"
+    "header/CAddressBookTrie.h"
+    "header/CAddressBook.h"
+    "header/CAddressBookManager.h"
 
-add_executable(AddressBookApp "source/main.cpp")
-target_link_libraries(AddressBookApp PUBLIC SimpleAddressBookLib)
+    "source/AddressBookInterface.cpp"
+    "source/AddressBookTypes.cpp"
+    "source/CAddressBookTrie.cpp"
+    "source/CAddressBook.cpp"
+    "source/CAddressBookManager.cpp"
+)
+
+target_include_directories(AddressBookLib PUBLIC "interface" PRIVATE "header")
+
+add_executable(DemoApp "DemoApp.cpp")
+target_link_libraries(DemoApp PUBLIC AddressBookLib)

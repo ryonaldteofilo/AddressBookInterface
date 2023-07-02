@@ -2,22 +2,16 @@
 //		Includes
 //=======================================================
 #include "CAddressBookManager.h"
-
-
-
-
+#include "CAddressBook.h"
 
 //=======================================================
 //		CAddressBookManager
 //=======================================================
-CAddressBookManager::CAddressBookManager()
+CAddressBookManager::CAddressBookManager() :
+	mpAddressBook(new CAddressBook)
 {
 
 }
-
-
-
-
 
 //=======================================================
 //		Get : Get singleton
@@ -28,14 +22,10 @@ CAddressBookManager* CAddressBookManager::Get()
 	return &instance;
 }
 
-
-
-
-
 //=======================================================
 //		GetAddressBook : Get address book
 //=======================================================
-CSimpleAddressBook& CAddressBookManager::GetAddressBook()
+CAddressBook* CAddressBookManager::GetAddressBook()
 {
-	return mAddressBook;
+	return mpAddressBook.get();
 }
