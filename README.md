@@ -1,11 +1,12 @@
 # Address Book Interface
-Address book interface to add, remove and search address entries in first or last name order alphabetically.
+A simple thread-safe address book interface to add, remove, search and retrieve address entries alphabetically in both first or last name order.
 
-## Features
-* Add/remove address entries (first name + last name + phone number), address entries could be easily altered to suit needs.
-* Retrieve entries in alphabetically, in first name or last name order.
-* Search for entries using their first and/or last name
+## Features/Details
 * Thread-safe
+* Customisable address entries (*firstname* + *lastname* + *phonenumber* + ...).
+* Add/remove entries which are sorted internally in tries/prefix trees.
+* Retrieve entries in alphabetical order.
+* Search for entries using first or last name.
 
 ## Build Instructions
 1. Clone repo
